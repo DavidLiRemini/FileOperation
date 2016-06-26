@@ -591,6 +591,60 @@ void CCDirectory::ParseOldCatalogTree(std::string path, std::vector<std::string>
 	_findclose(handle);
 }
 
+void CCDirectory::ParseOldCatalogTree(std::string path, std::vector<std::string>& treePath, Directory_Info& d_info)
+{
+	std::string searchPath = path + "*.*";
+	_finddata_t info;
+	intptr_t handle = _findfirst(searchPath.c_str(), &info);
+	if (handle == -1)
+	{
+		//
+	}
+	do
+	{
+		std::string nd = info.name;
+		FileAttributes attr = (FileAttributes)info.attrib;
+		if ((attr & FileAttributes::DIRECTORY) && nd != "." && nd != "..")
+		{
+			std::string s = path + nd + "/";
+			++d_info.directoryNumberInfo;
+			treePath.push_back(s);
+			ParseOldCatalogTree(s, treePath, d_info);
+		}
+		else if (nd != "." && nd != "..")
+		{
+			std::string t = path + nd;
+			++d_info.fileNumberInfo;
+			d_info.fileTotalSizeInfo += info.size;
+			treePath.push_back(t);
+		}
+	} while (!_findnext(handle, &info));
+	_findclose(handle);
+}
+
+void CCDirectory::DisplayDirectoryInformation(std::string path)
+{
+	if (path.back() != '/')
+	{
+		path += "/";
+	}
+	std::vector<std::string>oldPath;
+	Directory_Info info;
+	CCDirectory::ParseOldCatalogTree(path, oldPath, info);
+	if (info.fileTotalSizeInfo >= 1024*1024*1024)
+	{
+		printf("Directory's total file size: %4.3gG\n", info.fileTotalSizeInfo / (1024*1024*1024));
+	}
+	else if (info.fileTotalSizeInfo >= 1024 * 1024)
+	{
+		printf("Directory's total file size: %4.3gM\n", info.fileTotalSizeInfo / (1024 * 1024));
+	}
+	else
+		printf("Directory's total file size: %4.3gK\n", info.fileTotalSizeInfo / 1024);
+	printf("Total number of files: %lu\n", info.fileNumberInfo);
+	printf("Total number of subdirectory: %lu\n", info.directoryNumberInfo);
+}
+
 void CCDirectory::SplitFilesAndDirectories(
 	std::vector<std::string>& originTree,
 	std::string& newPath,
