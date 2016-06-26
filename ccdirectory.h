@@ -153,6 +153,13 @@ public:
 	// @Brief:	设置日期的助手函数
 	//************************************
 	static void SetDateTime(DateTime&, struct tm*);
+	//************************************
+	// @Method:    DisplayDirectoryInformation
+	// @Returns:   void
+	// @Parameter: path
+	// @Brief:	查看指定目录下总文件大小及子目录信息
+	//************************************
+	static void DisplayDirectoryInformation(std::string path);
 private:
 	//************************************
 	// @Method:    SearchFile
@@ -223,6 +230,7 @@ private:
 	// @Parameter: splitedNewFiles	新目录下所有文件
 	// @Brief:	根据目录树获取原目录树下所有文件，和所有子目录，以及新目录
 	//************************************
+	static void ParseOldCatalogTree(std::string path, std::vector<std::string>& treePath, Directory_info& d_info);
 	static void SplitFilesAndDirectories(
 		std::vector<std::string>& originTree, 
 		std::string& newPath, std::string& oldPath,
