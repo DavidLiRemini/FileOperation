@@ -63,6 +63,18 @@ struct FolderNode
 	std::vector<FolderNode>subChildren;
 };
 
+struct Directory_Info
+{
+public:
+	double fileTotalSizeInfo;
+	unsigned long fileNumberInfo;
+	unsigned long directoryNumberInfo;
+	Directory_Info()
+		:fileTotalSizeInfo(0),
+		fileNumberInfo(0),
+		directoryNumberInfo(0)
+	{}
+};
 class FileStream
 {
 private:
