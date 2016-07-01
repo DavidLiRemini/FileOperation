@@ -101,6 +101,7 @@ std::vector<std::string> CC_directory_linux::GetSubDirectoriesCollection(std::st
 			resultSet.push_back(pathName + "/");
 		}
 	}
+	closedir(d);
 	return resultSet;
 }
 
@@ -134,6 +135,7 @@ std::vector<std::string> CC_directory_linux::GetFiles(std::string path)
 			resultSet.push_back(pathName);
 		}
 	}
+	closedir(d);
 	return resultSet;
 }
 
