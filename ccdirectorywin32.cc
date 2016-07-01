@@ -145,14 +145,6 @@ std::vector<std::string>CC_directory_win32::GetFiles(std::string path)
 	return files;
 }
 
-std::vector<std::string> CC_directory_win32::GetFilesAndDirectories(std::string path)
-{
-	std::vector<std::string>directory = GetSubDirectoriesCollection(path);
-	std::vector<std::string>files = GetFiles(path);
-	files.insert(files.end(), directory.begin(), directory.end());
-	return files;
-}
-
 bool CC_directory_win32::Exists(std::string path)
 {
 	int stat = _access(path.c_str(), 0);
@@ -285,18 +277,6 @@ std::string CC_directory_win32::GetRootDriveSymbol(int index)
 		R"(Z:\)", "", "", "", "", "", "", "", "", ""
 	};
 	return symbolMap[index];
-}
-
-std::string CC_directory_win32::GetParentDirectory(std::string path)
-{
-	if (!Exists(path))
-	{
-		return "";
-	}
-
-	size_t index = path.rfind('/');
-	std::string parent = path.substr(0, index);
-	return parent;
 }
 
 void CC_directory_win32::MoveDirectory(std::string sourcePath, std::string destPath)

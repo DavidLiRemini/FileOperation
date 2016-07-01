@@ -11,11 +11,9 @@ public:
 	void RemoveDirectory(std::string path)override;
 	std::vector<std::string> GetSubDirectoriesCollection(std::string path)override;
 	std::vector<std::string> GetFiles(std::string path)override;
-	std::vector<std::string> GetFilesAndDirectories(std::string path)override;
 	bool Exists(std::string path)override;
 	std::string GetCurrentDirectory()override;
 	void DisplayDirectoryInformation(std::string path)override;
-	std::string GetParentDirectory(std::string path)override;
 	std::string GetDirectoryRoot(std::string path)override;
 	void MoveDirectory(std::string sourcePath, std::string destPath)override;
 	void CopyDirectory(std::string sourcePath, std::string destPath)override;

@@ -137,17 +137,6 @@ std::vector<std::string> CC_directory_linux::GetFiles(std::string path)
 	return resultSet;
 }
 
-std::vector<std::string> CC_directory_linux::GetFilesAndDirectories(std::string path)
-{
-	std::vector<std::string>files = GetFiles(path);
-	std::vector<std::string>directory = GetSubDirectoriesCollection(path);
-	for (const auto& it : directory)
-	{
-		files.push_back(it);
-	}
-	//���ļ����ļ���
-	return files;
-}
 
 std::string CC_directory_linux::GetCurrentDirectory()
 {
@@ -212,18 +201,6 @@ void CC_directory_linux::ParseOriginDirectoryTree(std::string& path, DirectoryIn
 		}
 	}
 	closedir(d);
-}
-
-std::string CC_directory_linux::GetParentDirectory(std::string path)
-{
-	if (!Exists(path))
-	{
-		return "";
-	}
-
-	size_t index = path.rfind('/');
-	std::string parent = path.substr(0, index);
-	return parent;
 }
 
 void CC_directory_linux::ParseDirectoryTree(std::string& path, std::vector<std::string>& treePath)

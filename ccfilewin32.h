@@ -33,20 +33,10 @@ public:
 	intptr_t Copy(std::string sourcePath, std::string destPath)override;
 	void Delete(std::string path)override;
 	bool Exists(std::string path)override;
-	bool CanRead(std::string path);
-	bool CanWrite(std::string path);
-	bool CanExecute(std::string path);
-	void Move(std::string sourcePath, std::string destPath);
-	FileStream* Open(std::string path, FileMode mode);
-	FileStream* OpenRead(std::string path);
-	FileStream* OpenWrite(std::string path);
-	intptr_t ReadAllBytes(std::string path, char destBuffer[], size_t length);
-	long ReadAllLines(std::string path, std::vector<std::string>& destContainer);
-	std::string ReadAllText(std::string path);
-	bool Replace(std::string sourcePath, std::string replaceFilePath, std::string backPath);
-	intptr_t WriteAllBytes(std::string path, const char sourceData[], size_t len);
-	long WriteAllLines(std::string path, const std::vector<std::string>& sourceData);
-	intptr_t WriteAllText(std::string path, std::string& content) ;
+	bool CanRead(std::string path)override;
+	bool CanWrite(std::string path)override;
+	bool CanExecute(std::string path)override;
+
 	//************************************
 	// @Method:    GetAccessControl
 	// @Returns:   FileAccess
