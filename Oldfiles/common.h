@@ -1,7 +1,42 @@
 #pragma once
 
-#include <string>
-#include <stdio.h>
+#include <vector>
+#include <errno.h>
+#include <io.h>
+#include <direct.h>
+#include <deque>
+#include <stack>
+enum FileAccess
+{
+	//文件存在
+	EXISTENCEONLY = 0x00,
+	//文件可写
+	WRITEPERMISSION = 0x02,
+	//文件只读
+	READPERMISSION = 0x04,
+	//文件可读写
+	READANDWRITEPERMISSION = 0x06,
+	//下面两项主要是为了设置文件权限, 所有文件皆有可读权限，因此S_CANWRITE 等于 S_CANREAD|S_CANWRITE
+	S_CANREAD = 0x0100,
+	S_CANWRITE = 0x0080
+};
+enum FileAttributes
+{
+	UNKNOWN = -1,
+	//普通文件，无访问限制
+	NORMAL=0x00,
+	//只读文件
+	RDONLY=0x01,
+	//隐藏文件
+	HIDDEN=0x02,
+	//系统文件
+	SYSTEM=0x04,
+	//目录
+	DIRECTORY=0x10,
+	//归档文件
+	ARCH=0x20
+};
+
 enum FileMode
 {
 	//只读模式打开
@@ -18,6 +53,14 @@ enum FileMode
 	APPENDANDRD,
 	//二进制方式，以二进制方式打开文件，而非以普通文本方式
 	BINARY
+};
+
+struct FolderNode
+{
+	std::string name;
+	FileAttributes nodeAttr;
+	bool hasDirectory = false;
+	std::vector<FolderNode>subChildren;
 };
 
 class FileStream
@@ -61,42 +104,7 @@ public:
 	std::string FormatTime()
 	{
 		char buf[30] = { 0 };
-#if defined(_WIN32)
 		sprintf_s(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, sec);
-#elif defined(__GNUC__)
-		snprintf(buf, sizeof(buf), "%4d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, sec);
-#endif
 		return buf;
-	}
-};
-
-enum FileAttributes
-{
-	UNKNOWN = -1,
-	//普通文件，无访问限制
-	NORMAL = 0x00,
-	//只读文件
-	RDONLY = 0x01,
-	//隐藏文件
-	HIDDEN = 0x02,
-	//系统文件
-	SYSTEM = 0x04,
-	//目录
-	DIRECTORY = 0x10,
-	//归档文件
-	ARCH = 0x20
-};
-
-struct DirectoryInfo
-{
-public:
-	unsigned long totalFileNumber;
-	unsigned long totalDirectoryNumber;
-	double totalDirectorySize;
-	DirectoryInfo() :
-		totalFileNumber(0),
-		totalDirectoryNumber(0),
-		totalDirectorySize(0){
-
 	}
 };
