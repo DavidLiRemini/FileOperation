@@ -1,7 +1,7 @@
 #include "ccfilestrategy.h"
 
 #include <assert.h>
-
+#include <string.h>
 CC_file_strategy* CC_file_strategy::f_instance = nullptr;
 
 static long CopyFileData(FileStream* src, FileStream* dest)
