@@ -210,13 +210,13 @@ long CC_file_strategy::ReadAllLines(std::string path, std::vector<std::string>& 
 
 	char buff[300] = { 0 };
 	long count = 0;
-	const char* bufPtr = nullptr;
+	const char* bufPtr = buff;
 	while (bufPtr != nullptr)
 	{
 		bufPtr = fgets(buff, sizeof(buff), stream.Getfd());
 		if (bufPtr != nullptr)
 		{
-			*(buff + strlen(buff)) = '\0';
+			*(buff + strlen(buff) - 1) = '\0';
 			destContainer.push_back(buff);
 			++count;
 		}
