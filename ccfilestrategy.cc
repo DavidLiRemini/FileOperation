@@ -208,18 +208,46 @@ long CC_file_strategy::ReadAllLines(std::string path, std::vector<std::string>& 
 		return -1;
 	}
 
-	char buff[300] = { 0 };
+	char buff[8192] = { 0 };
 	long count = 0;
 	const char* bufPtr = buff;
+	std::string extra;
+	bool flag = false;
 	while (bufPtr != nullptr)
 	{
-		bufPtr = fgets(buff, sizeof(buff), stream.Getfd());
-		if (bufPtr != nullptr)
+		while (true)
 		{
-			*(buff + strlen(buff) - 1) = '\0';
-			destContainer.push_back(buff);
-			++count;
+			bufPtr = fgets(buff, sizeof(buff), stream.Getfd());
+			if (bufPtr != nullptr)
+			{
+				extra.append(bufPtr);
+				if (extra.back() != '\n')//说明这一行还未读完整
+				{
+					continue;
+				}
+				else
+				{
+					destContainer.push_back(extra.substr(0, extra.size() - 1));
+					flag = true;
+					++count;
+					break;
+				}
+			}
+			else
+			{
+				if (!flag && !extra.empty())
+				{
+					destContainer.push_back(extra);
+				}
+				else if (flag && !extra.empty())
+				{
+					destContainer.push_back(extra);
+				}
+				++count;
+				break;
+			}
 		}
+		extra.clear();
 	}
 	assert(count == destContainer.size());
 	return count;
