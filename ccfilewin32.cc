@@ -105,8 +105,8 @@ FileAttributes CC_file_win32::GetAttributes(std::string path)
 			return FileAttributes::UNKNOWN;
 		}
 		auto value = (int)fileInfo.attrib;
-		return (FileAttributes)value;
 		_findclose(handle);
+		return (FileAttributes)value;
 	}
 	return FileAttributes::UNKNOWN;
 }
@@ -205,35 +205,35 @@ long CC_file_win32::CopyFileData(FileStream* src, FileStream* dest)
 	if (src == NULL || dest == NULL) {
 		return -1;
 	}
-	// 指针移动到文件末尾
+	// move to the end of file	
 	fseek(src->Getfd(), 0, SEEK_END);
-	// 获取文件大小
+	// get file size
 	long file_size = ftell(src->Getfd());
-	// 指针回到文件头
+	// back to the beginning of file
 	rewind(src->Getfd());
 
 	int res = 0;
-	intptr_t count = 0; // 进度。
+	intptr_t count = 0; // percentage。
 
 	const int LEN_DATA = 128 * 1024;
 	unsigned char data[LEN_DATA] = { 0 };
 	//    printf("size: %lu \n", sizeof(data));
 	while (1) {
-		// 获取当前位置
+		// current position
 		long current = ftell(src->Getfd());
-		// 计算剩余量
+		// remainder
 		long leave = file_size - current;
 		int readSize = LEN_DATA;
 		if (leave == 0) {
-			// 拷贝结束了。
+			// done
 			printf("leave == 0 feof.\n");
 			break;
 		}
 		else if (leave < LEN_DATA) {
-			// 拷贝快结束了，但数据量已经小于LEN_DATA了
+			// almost done 
 			readSize = (int)leave;
 		}
-		// 读取数据块
+		
 		size_t res_t = fread(&data, 1, readSize, src->Getfd());
 		if (res_t == readSize) {
 			// 正常读取
